@@ -52,6 +52,7 @@ let index = 0;
 let score = 0;
 
 function loadQuestion() {
+
   if(index >= quiz.length) {
     document.querySelector('.quiz-box').innerHTML = `<h2>Test tugadi 🎉</h2>
       <p>To‘g‘ri javoblar soni: ${score} / ${quiz.length}</p>`;
