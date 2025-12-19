@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IT & Python Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f6f8; padding:20px; }
+    .quiz-box { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,.1); }
+    h2 { margin-bottom:10px; }
+    .option { margin:8px 0; }
+    button { padding:10px 16px; margin-top:10px; cursor:pointer; }
+    #result { font-weight:bold; margin-top:10px; }
+    #add-question { margin-top:30px; padding:20px; background:#e9ecef; border-radius:8px; }
+    input, select { margin:5px 0; padding:5px; width:100%; }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <div id="result"></div>
+    <button id="nextBtn" onclick="nextQuestion()" style="display:none;">Keyingi</button>
+    <div id="score" style="margin-top:10px; font-weight:bold;"></div>
+  </div>
+
+  <div id="add-question">
+    <h3>Yangi savol qo‘shish</h3>
+    <input type="text" id="newQuestion" placeholder="Savol matni">
+    <input type="text" id="opt0" placeholder="Javob 1">
+    <input type="text" id="opt1" placeholder="Javob 2">
+    <input type="text" id="opt2" placeholder="Javob 3">
+    <input type="text" id="opt3" placeholder="Javob 4">
+    <select id="correct">
+      <option value="0">Javob 1 to‘g‘ri</option>
+      <option value="1">Javob 2 to‘g‘ri</option>
+      <option value="2">Javob 3 to‘g‘ri</option>
+      <option value="3">Javob 4 to‘g‘ri</option>
+    </select>
+    <button onclick="addQuestion()">Savol qo‘shish</button>
+  </div>
+
+<script>
+const quiz = [
+  {q:"Internet nima?", o:["Kompyuter","Global tarmoq","Brauzer","Server"], a:1},
+  {q:"Python nima?", o:["O‘yin","Dasturlash tili","OS","Brauzer"], a:1},
+  {q:"Python kim tomonidan yaratilgan?", o:["Linus","Guido","Bill","Mark"], a:1}
+];
+
+let index = 0;
+let score = 0;
+
+function loadQuestion() {
+  if(index >= quiz.length) {
+    document.querySelector('.quiz-box').innerHTML = `<h2>Test tugadi 🎉</h2>
+      <p>To‘g‘ri javoblar soni: ${score} / ${quiz.length}</p>`;
+    return;
+  }
+
+  const q = quiz[index];
+  document.getElementById('question').innerText = (index+1)+". "+q.q;
+  const optDiv = document.getElementById('options');
+  optDiv.innerHTML = "";
+  document.getElementById('result').innerText = "";
+  document.getElementById('nextBtn').style.display = 'none';
+
+  q.o.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerText = opt;
+    btn.onclick = ()=>checkAnswer(i);
+    optDiv.appendChild(btn);
+  });
+}
+
+function checkAnswer(i) {
+  const correct = quiz[index].a;
+  const res = document.getElementById('result');
+  if(i === correct) {
+    res.innerText = "✅ To‘g‘ri";
+    score++;
+  } else {
+    res.innerText = "❌ Xato";
+  }
+  document.getElementById('score').innerText = `Ball: ${score}`;
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  index++;
+  loadQuestion();
+}
+
+// Yangi savol qo‘shish funksiyasi
+function addQuestion() {
+  const q = document.getElementById('newQuestion').value.trim();
+  const o0 = document.getElementById('opt0').value.trim();
+  const o1 = document.getElementById('opt1').value.trim();
+  const o2 = document.getElementById('opt2').value.trim();
+  const o3 = document.getElementById('opt3').value.trim();
+  const a = parseInt(document.getElementById('correct').value);
+
+  if(q && o0 && o1 && o2 && o3) {
+    quiz.push({q:q, o:[o0,o1,o2,o3], a:a});
+    alert("Savol qo‘shildi!");
+    document.getElementById('newQuestion').value = "";
+    document.getElementById('opt0').value = "";
+    document.getElementById('opt1').value = "";
+    document.getElementById('opt2').value = "";
+    document.getElementById('opt3').value = "";
+  } else {
+    alert("Iltimos, barcha maydonlarni to‘ldiring!");
+  }
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
